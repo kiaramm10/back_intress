@@ -4,8 +4,11 @@ namespace App\Entity;
 
 use App\Repository\PersonalRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+
 
 #[ORM\Entity(repositoryClass: PersonalRepository::class)]
+#[ApiResource]
 class Personal
 {
     #[ORM\Id]

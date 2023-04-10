@@ -1,5 +1,8 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    paths:
+        '%kernel.project_dir%/templates': ~
+        '%kernel.project_dir%/vendor/api-platform/core/src/Symfony/Bundle/Resources/views': '@ApiPlatform'
 
 when@test:
     twig:
