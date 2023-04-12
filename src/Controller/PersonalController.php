@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/personal')]
+
 class PersonalController extends AbstractController
 {
-    #[Route('/', name: 'app_personal_index', methods: ['GET'])]
-    public function index(PersonalRepository $personalRepository): Response
+    #[Route('/persona', name: 'personal_home', requirements:['_role' => 'ROLE_USER'])]
+    public function index(): Response
     {
         return $this->render('personal/index.html.twig', [
             'personals' => $personalRepository->findAll(),
@@ -74,5 +74,19 @@ class PersonalController extends AbstractController
         }
 
         return $this->redirectToRoute('app_personal_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/personal/holidays', name: 'personal_holidays', requirements: ['_role' => 'ROLE_USER'])]
+    public function holidays(): Response
+    {
+        // Lógica para mostrar las vacaciones del usuario
+        return $this->render('personal/holidays.html.twig');
+    }
+
+    #[Route('/personal/documents', name: 'personal_documents', requirements: ['_role' => 'ROLE_USER'])]
+    public function documents(): Response
+    {
+        // Lógica para mostrar los documentos del usuario
+        return $this->render('personal/documents.html.twig');
     }
 }

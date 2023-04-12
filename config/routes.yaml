@@ -33,3 +33,83 @@ api_platform_swagger_ui:
         _format: html
     requirements:
         _format: html
+admin_home:
+    path: /admin
+    controller: App\Controller\AdminController::index
+    requirements:
+        _role: ROLE_ADMIN
+
+master_home:
+    path: /master
+    controller: App\Controller\MasterController::index
+    requirements:
+        _role: ROLE_MASTER
+
+personal_home:
+    path: /personal
+    controller: App\Controller\PersonalController::index
+    requirements:
+        _role: ROLE_USER
+
+# Rutas para la entidad AccumulatedVacation
+accumulated_vacation_index:
+    path: /admin/accumulated-vacation
+    controller: App\Controller\AdminController::accumulatedVacationIndex
+    requirements:
+        _role: ROLE_ADMIN
+
+# Rutas para la entidad Documents
+document_index:
+    path: /personal/document
+    controller: App\Controller\PersonalController::documentIndex
+    requirements:
+        _role: ROLE_USER
+
+# Rutas para la entidad Holidays
+holidays_index:
+    path: /personal/holidays
+    controller: App\Controller\PersonalController::holidaysIndex
+    requirements:
+        _role: ROLE_USER
+
+# Rutas para la entidad Persona
+persona_index:
+    path: /personal/persona
+    controller: App\Controller\PersonalController::personaIndex
+    requirements:
+        _role: ROLE_USER
+
+# Rutas para la entidad Signin
+signin_index:
+    path: /personal/signin
+    controller: App\Controller\PersonalController::signinIndex
+    requirements:
+        _role: ROLE_USER
+
+# Rutas para la entidad User
+user_index:
+    path: /admin/user
+    controller: App\Controller\AdminController::userIndex
+    requirements:
+        _role: ROLE_ADMIN
+
+# Rutas para la entidad Workshops
+workshop_index:
+    path: /personal/workshop
+    controller: App\Controller\PersonalController::workshopIndex
+    requirements:
+        _role: ROLE_USER
+
+# Ruta para la creación de roles de Admin y Master
+create_role:
+    path: /admin/create-role
+    controller: App\Controller\AdminController::createRole
+    requirements:
+        _role: ROLE_ADMIN
+
+# Ruta para la aceptación de vacaciones solicitadas por usuarios con rol User
+approve_holidays:
+    path: /master/approve-holidays
+    controller: App\Controller\MasterController::approveHolidays
+    requirements:
+        _role: ROLE_MASTER
