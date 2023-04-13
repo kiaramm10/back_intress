@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PersonalRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 
@@ -39,6 +41,14 @@ class Personal
 
     #[ORM\ManyToOne(inversedBy: 'personal')]
     private ?Documents $documents = null;
+
+    #[ORM\OneToMany(mappedBy: 'personal', targetEntity: Holidays::class)]
+    private Collection $accumulatedVacations;
+
+    public function __construct()
+    {
+        $this->accumulatedVacations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,6 +147,36 @@ class Personal
     public function setDocuments(?Documents $documents): self
     {
         $this->documents = $documents;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AccumulatedVacation>
+     */
+    public function getAccumulatedVacations(): Collection
+    {
+        return $this->accumulatedVacations;
+    }
+
+    public function addAccumulatedVacation(AccumulatedVacation $accumulatedVacation): self
+    {
+        if (!$this->accumulatedVacations->contains($accumulatedVacation)) {
+            $this->accumulatedVacations->add($accumulatedVacation);
+            $accumulatedVacation->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccumulatedVacation(AccumulatedVacation $accumulatedVacation): self
+    {
+        if ($this->accumulatedVacations->removeElement($accumulatedVacation)) {
+            // set the owning side to null (unless already changed)
+            if ($accumulatedVacation->getEmployee() === $this) {
+                $accumulatedVacation->setEmployee(null);
+            }
+        }
 
         return $this;
     }

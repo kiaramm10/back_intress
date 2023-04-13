@@ -27,10 +27,14 @@ class Holidays
     #[ORM\ManyToMany(targetEntity: Signin::class, mappedBy: 'holidays')]
     private Collection $workshops;
 
+    #[ORM\OneToMany(mappedBy: 'days', targetEntity: AccumulatedVacation::class)]
+    private Collection $accumulatedVacations;
+
     public function __construct()
     {
         $this->personal = new ArrayCollection();
         $this->workshops = new ArrayCollection();
+        $this->accumulatedVacations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,10 +102,54 @@ class Holidays
         return $this;
     }
 
+    public function getEmployee(): Collection
+{
+    $employee = new ArrayCollection();
+
+    foreach ($this->getPersonal() as $personal) {
+        if ($employee = $personal->getEmployee()) {
+            $employee->add($employee);
+        }
+    }
+
+    return $employee;
+}
+
+
     public function removeWorkshop(Signin $workshop): self
     {
         if ($this->workshops->removeElement($workshop)) {
             $workshop->removeHoliday($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, AccumulatedVacation>
+     */
+    public function getAccumulatedVacations(): Collection
+    {
+        return $this->accumulatedVacations;
+    }
+
+    public function addAccumulatedVacation(AccumulatedVacation $accumulatedVacation): self
+    {
+        if (!$this->accumulatedVacations->contains($accumulatedVacation)) {
+            $this->accumulatedVacations->add($accumulatedVacation);
+            $accumulatedVacation->setDays($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccumulatedVacation(AccumulatedVacation $accumulatedVacation): self
+    {
+        if ($this->accumulatedVacations->removeElement($accumulatedVacation)) {
+            // set the owning side to null (unless already changed)
+            if ($accumulatedVacation->getDays() === $this) {
+                $accumulatedVacation->setDays(null);
+            }
         }
 
         return $this;
